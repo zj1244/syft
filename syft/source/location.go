@@ -1,7 +1,7 @@
 package source
 
 import (
-	"github.com/anchore/syft/internal/log"
+	"github.com/zj1244/syft/internal/log"
 
 	"github.com/anchore/stereoscope/pkg/file"
 	"github.com/anchore/stereoscope/pkg/image"

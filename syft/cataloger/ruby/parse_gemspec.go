@@ -8,12 +8,12 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/anchore/syft/internal"
+	"github.com/zj1244/syft/internal"
 
 	"github.com/mitchellh/mapstructure"
 
-	"github.com/anchore/syft/syft/cataloger/common"
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/cataloger/common"
+	"github.com/zj1244/syft/syft/pkg"
 )
 
 // integrity check
@@ -32,7 +32,7 @@ var patterns = map[string]*regexp.Regexp{
 	"version": regexp.MustCompile(`.*\.version\s*=\s*["']{1}(?P<version>.*)["']{1} *`),
 
 	// match example:
-	// homepage = "https://github.com/anchore/syft".freeze   --->   https://github.com/anchore/syft
+	// homepage = "https://github.com/zj1244/syft".freeze   --->   https://github.com/zj1244/syft
 	"homepage": regexp.MustCompile(`.*\.homepage\s*=\s*["']{1}(?P<homepage>.*)["']{1} *`),
 
 	// match example:       files = ["exe/bundle".freeze, "exe/bundler".freeze]    --->    "exe/bundle".freeze, "exe/bundler".freeze

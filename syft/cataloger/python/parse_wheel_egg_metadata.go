@@ -7,11 +7,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/anchore/syft/internal/file"
+	"github.com/zj1244/syft/internal/file"
 
 	"github.com/mitchellh/mapstructure"
 
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/pkg"
 )
 
 // parseWheelOrEggMetadata takes a Python Egg or Wheel (which share the same format and values for our purposes),

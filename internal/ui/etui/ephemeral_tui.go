@@ -25,13 +25,13 @@ import (
 	"os"
 	"sync"
 
-	"github.com/anchore/syft/internal/logger"
+	"github.com/zj1244/syft/internal/logger"
 
-	"github.com/anchore/syft/internal/ui/common"
-	"github.com/anchore/syft/ui"
+	"github.com/zj1244/syft/internal/ui/common"
+	"github.com/zj1244/syft/ui"
 
-	"github.com/anchore/syft/internal/log"
-	syftEvent "github.com/anchore/syft/syft/event"
+	"github.com/zj1244/syft/internal/log"
+	syftEvent "github.com/zj1244/syft/syft/event"
 	"github.com/wagoodman/go-partybus"
 	"github.com/wagoodman/jotframe/pkg/frame"
 )

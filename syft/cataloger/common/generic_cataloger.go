@@ -6,9 +6,9 @@ package common
 import (
 	"io"
 
-	"github.com/anchore/syft/internal/log"
-	"github.com/anchore/syft/syft/pkg"
-	"github.com/anchore/syft/syft/source"
+	"github.com/zj1244/syft/internal/log"
+	"github.com/zj1244/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/source"
 )
 
 // GenericCataloger implements the Catalog interface and is responsible for dispatching the proper parser function for

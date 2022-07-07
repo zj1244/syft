@@ -4,8 +4,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/anchore/syft/syft/pkg"
 	"github.com/go-test/deep"
+	"github.com/zj1244/syft/syft/pkg"
 )
 
 func TestParseWheelEggMetadata(t *testing.T) {

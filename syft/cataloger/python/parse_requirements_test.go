@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-test/deep"
 
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/pkg"
 )
 
 func assertPackagesEqual(t *testing.T, actual []pkg.Package, expected map[string]pkg.Package) {

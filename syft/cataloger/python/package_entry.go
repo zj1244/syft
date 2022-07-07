@@ -3,7 +3,7 @@ package python
 import (
 	"path/filepath"
 
-	"github.com/anchore/syft/syft/source"
+	"github.com/zj1244/syft/syft/source"
 )
 
 type packageEntry struct {

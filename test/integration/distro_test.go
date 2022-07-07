@@ -4,10 +4,10 @@ import (
 	"testing"
 
 	"github.com/anchore/stereoscope/pkg/imagetest"
-	"github.com/anchore/syft/syft"
-	"github.com/anchore/syft/syft/distro"
-	"github.com/anchore/syft/syft/source"
 	"github.com/go-test/deep"
+	"github.com/zj1244/syft/syft"
+	"github.com/zj1244/syft/syft/distro"
+	"github.com/zj1244/syft/syft/source"
 )
 
 func TestDistroImage(t *testing.T) {

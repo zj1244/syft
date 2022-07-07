@@ -10,7 +10,7 @@ import (
 	"github.com/anchore/stereoscope/pkg/file"
 	"github.com/anchore/stereoscope/pkg/filetree"
 	"github.com/anchore/stereoscope/pkg/image"
-	"github.com/anchore/syft/internal/log"
+	"github.com/zj1244/syft/internal/log"
 )
 
 var _ Resolver = (*AllLayersResolver)(nil)

@@ -21,15 +21,15 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/anchore/syft/internal/bus"
-	"github.com/anchore/syft/internal/log"
-	"github.com/anchore/syft/syft/cataloger"
-	"github.com/anchore/syft/syft/distro"
-	"github.com/anchore/syft/syft/logger"
-	"github.com/anchore/syft/syft/pkg"
-	jsonPresenter "github.com/anchore/syft/syft/presenter/json"
-	"github.com/anchore/syft/syft/source"
 	"github.com/wagoodman/go-partybus"
+	"github.com/zj1244/syft/internal/bus"
+	"github.com/zj1244/syft/internal/log"
+	"github.com/zj1244/syft/syft/cataloger"
+	"github.com/zj1244/syft/syft/distro"
+	"github.com/zj1244/syft/syft/logger"
+	"github.com/zj1244/syft/syft/pkg"
+	jsonPresenter "github.com/zj1244/syft/syft/presenter/json"
+	"github.com/zj1244/syft/syft/source"
 )
 
 // Catalog the given image from a particular perspective (e.g. squashed source, all-layers source). Returns the discovered

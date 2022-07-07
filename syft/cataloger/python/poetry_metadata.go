@@ -1,6 +1,6 @@
 package python
 
-import "github.com/anchore/syft/syft/pkg"
+import "github.com/zj1244/syft/syft/pkg"
 
 type PoetryMetadata struct {
 	Packages []PoetryMetadataPackage `toml:"package"`

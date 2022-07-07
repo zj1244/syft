@@ -4,7 +4,7 @@ Package apkdb provides a concrete Cataloger implementation for Alpine DB files.
 package apkdb
 
 import (
-	"github.com/anchore/syft/syft/cataloger/common"
+	"github.com/zj1244/syft/syft/cataloger/common"
 )
 
 // NewApkdbCataloger returns a new Alpine DB cataloger object.

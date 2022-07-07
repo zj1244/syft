@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-test/deep"
 
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/pkg"
 )
 
 func TestParseGoMod(t *testing.T) {
@@ -35,8 +35,8 @@ func TestParseGoMod(t *testing.T) {
 					Language: pkg.Go,
 					Type:     pkg.GoModulePkg,
 				},
-				"github.com/anchore/go-version": {
-					Name:     "github.com/anchore/go-version",
+				"github.com/anchore/go-testutils": {
+					Name:     "github.com/anchore/go-testutils",
 					Version:  "v1.2.2-0.20200701162849-18adb9c92b9b",
 					Language: pkg.Go,
 					Type:     pkg.GoModulePkg,

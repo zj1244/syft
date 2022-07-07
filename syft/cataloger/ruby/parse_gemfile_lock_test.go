@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/pkg"
 )
 
 func TestParseGemfileLockEntries(t *testing.T) {

@@ -3,7 +3,7 @@ Package log contains the singleton object and helper functions for facilitating 
 */
 package log
 
-import "github.com/anchore/syft/syft/logger"
+import "github.com/zj1244/syft/syft/logger"
 
 // Log is the singleton used to facilitate logging internally within syft
 var Log logger.Logger = &nopLogger{}

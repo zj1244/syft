@@ -7,15 +7,15 @@ package presenter
 import (
 	"io"
 
-	"github.com/anchore/syft/syft/distro"
+	"github.com/zj1244/syft/syft/distro"
 
-	"github.com/anchore/syft/syft/presenter/cyclonedx"
+	"github.com/zj1244/syft/syft/presenter/cyclonedx"
 
-	"github.com/anchore/syft/syft/pkg"
-	"github.com/anchore/syft/syft/presenter/json"
-	"github.com/anchore/syft/syft/presenter/table"
-	"github.com/anchore/syft/syft/presenter/text"
-	"github.com/anchore/syft/syft/source"
+	"github.com/zj1244/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/presenter/json"
+	"github.com/zj1244/syft/syft/presenter/table"
+	"github.com/zj1244/syft/syft/presenter/text"
+	"github.com/zj1244/syft/syft/source"
 )
 
 // Presenter defines the expected behavior for an object responsible for displaying arbitrary input and processed data

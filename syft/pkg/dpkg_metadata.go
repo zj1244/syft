@@ -1,8 +1,8 @@
 package pkg
 
 import (
-	"github.com/anchore/syft/syft/distro"
 	"github.com/package-url/packageurl-go"
+	"github.com/zj1244/syft/syft/distro"
 )
 
 // DpkgMetadata represents all captured data for a Debian package DB entry; available fields are described

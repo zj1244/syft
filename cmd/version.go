@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/anchore/syft/internal"
+	"github.com/zj1244/syft/internal"
 
-	"github.com/anchore/syft/internal/version"
-	"github.com/anchore/syft/syft/presenter"
+	"github.com/zj1244/syft/internal/version"
+	"github.com/zj1244/syft/syft/presenter"
 	"github.com/spf13/cobra"
 )
 

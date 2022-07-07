@@ -9,10 +9,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/anchore/syft/internal"
+	"github.com/zj1244/syft/internal"
 
-	"github.com/anchore/syft/syft/pkg"
 	"github.com/mitchellh/mapstructure"
+	"github.com/zj1244/syft/syft/pkg"
 )
 
 var errEndOfPackages = fmt.Errorf("no more packages to read")

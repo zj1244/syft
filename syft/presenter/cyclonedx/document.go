@@ -3,10 +3,10 @@ package cyclonedx
 import (
 	"encoding/xml"
 
-	"github.com/anchore/syft/internal"
-	"github.com/anchore/syft/internal/version"
-	"github.com/anchore/syft/syft/pkg"
-	"github.com/anchore/syft/syft/source"
+	"github.com/zj1244/syft/internal"
+	"github.com/zj1244/syft/internal/version"
+	"github.com/zj1244/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/source"
 	"github.com/google/uuid"
 )
 

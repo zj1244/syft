@@ -5,8 +5,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/anchore/syft/syft/pkg"
 	"github.com/go-test/deep"
+	"github.com/zj1244/syft/syft/pkg"
 )
 
 func compareEntries(t *testing.T, left, right pkg.DpkgMetadata) {

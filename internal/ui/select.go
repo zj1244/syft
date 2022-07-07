@@ -4,7 +4,6 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/anchore/syft/internal/ui/etui"
 	"golang.org/x/crypto/ssh/terminal"
 )
 
@@ -22,8 +21,7 @@ func Select(verbose, quiet bool) UI {
 	switch {
 	case runtime.GOOS == "windows" || verbose || quiet || notATerminal || !isStderrATty:
 		ui = LoggerUI
-	default:
-		ui = etui.OutputToEphemeralTUI
+
 	}
 
 	return ui

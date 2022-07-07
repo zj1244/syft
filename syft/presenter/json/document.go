@@ -3,11 +3,11 @@ package json
 import (
 	"fmt"
 
-	"github.com/anchore/syft/internal"
-	"github.com/anchore/syft/internal/version"
-	"github.com/anchore/syft/syft/distro"
-	"github.com/anchore/syft/syft/pkg"
-	"github.com/anchore/syft/syft/source"
+	"github.com/zj1244/syft/internal"
+	"github.com/zj1244/syft/internal/version"
+	"github.com/zj1244/syft/syft/distro"
+	"github.com/zj1244/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/source"
 )
 
 // Document represents the syft cataloging findings as a JSON document
@@ -36,7 +36,7 @@ func NewDocument(catalog *pkg.Catalog, srcMetadata source.Metadata, d *distro.Di
 		},
 		Schema: Schema{
 			Version: internal.JSONSchemaVersion,
-			URL:     fmt.Sprintf("https://raw.githubusercontent.com/anchore/syft/main/schema/json/schema-%s.json", internal.JSONSchemaVersion),
+			URL:     fmt.Sprintf("https://raw.githubusercontent.com/zj1244/syft/main/schema/json/schema-%s.json", internal.JSONSchemaVersion),
 		},
 	}
 

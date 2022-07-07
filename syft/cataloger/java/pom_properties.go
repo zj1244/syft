@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/pkg"
 	"github.com/mitchellh/mapstructure"
 )
 

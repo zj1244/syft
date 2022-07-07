@@ -4,7 +4,7 @@ Package golang provides a concrete Cataloger implementation for go.mod files.
 package golang
 
 import (
-	"github.com/anchore/syft/syft/cataloger/common"
+	"github.com/zj1244/syft/syft/cataloger/common"
 )
 
 // NewGoModCataloger returns a new Go module cataloger object.

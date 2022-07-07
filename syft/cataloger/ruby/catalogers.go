@@ -4,7 +4,7 @@ Package bundler provides a concrete Cataloger implementation for Ruby Gemfile.lo
 package ruby
 
 import (
-	"github.com/anchore/syft/syft/cataloger/common"
+	"github.com/zj1244/syft/syft/cataloger/common"
 )
 
 // NewGemFileLockCataloger returns a new Bundler cataloger object tailored for parsing index-oriented files (e.g. Gemfile.lock).

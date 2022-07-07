@@ -3,7 +3,7 @@ package java
 import (
 	"testing"
 
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/pkg"
 	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
@@ -114,7 +114,7 @@ func TestExtractInfoFromJavaArchiveFilename(t *testing.T) {
 			ty:        pkg.JavaPkg,
 		},
 		{
-			filename:  "BOOT-INF/lib/spring-data-r2dbc-1.1.0.RELEASE.jar", // Regression: https://github.com/anchore/syft/issues/255
+			filename:  "BOOT-INF/lib/spring-data-r2dbc-1.1.0.RELEASE.jar", // Regression: https://github.com/zj1244/syft/issues/255
 			version:   "1.1.0.RELEASE",
 			extension: "jar",
 			name:      "spring-data-r2dbc",

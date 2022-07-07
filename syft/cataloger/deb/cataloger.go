@@ -9,8 +9,8 @@ import (
 	"path"
 	"path/filepath"
 
-	"github.com/anchore/syft/syft/pkg"
-	"github.com/anchore/syft/syft/source"
+	"github.com/zj1244/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/source"
 )
 
 const (

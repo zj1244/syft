@@ -5,12 +5,12 @@ import (
 	"io"
 	"strings"
 
-	"github.com/anchore/syft/internal/log"
+	"github.com/zj1244/syft/internal/log"
 
-	"github.com/anchore/syft/internal"
-	"github.com/anchore/syft/internal/file"
-	"github.com/anchore/syft/syft/cataloger/common"
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/internal"
+	"github.com/zj1244/syft/internal/file"
+	"github.com/zj1244/syft/syft/cataloger/common"
+	"github.com/zj1244/syft/syft/pkg"
 )
 
 // integrity check

@@ -3,8 +3,8 @@ package pkg
 import (
 	"fmt"
 
-	"github.com/anchore/syft/syft/distro"
 	"github.com/package-url/packageurl-go"
+	"github.com/zj1244/syft/syft/distro"
 )
 
 // RpmdbMetadata represents all captured data for a RPM DB package entry.

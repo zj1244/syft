@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	hashiVersion "github.com/anchore/go-version"
-	"github.com/anchore/syft/internal"
+	"github.com/zj1244/syft/internal"
 )
 
 var latestAppVersionURL = struct {

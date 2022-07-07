@@ -8,7 +8,7 @@ import (
 
 	"github.com/scylladb/go-set"
 
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/pkg"
 )
 
 func TestGenerate(t *testing.T) {
@@ -157,7 +157,7 @@ func TestGenerate(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			actual := generatePackageCPEs(test.p)
+			actual := GeneratePackageCPEs(test.p)
 
 			expectedCpeSet := set.NewStringSet(test.expected...)
 			actualCpeSet := set.NewStringSet()

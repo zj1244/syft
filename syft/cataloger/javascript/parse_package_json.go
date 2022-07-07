@@ -7,14 +7,14 @@ import (
 	"io"
 	"regexp"
 
-	"github.com/anchore/syft/internal/log"
+	"github.com/zj1244/syft/internal/log"
 
-	"github.com/anchore/syft/internal"
+	"github.com/zj1244/syft/internal"
 
 	"github.com/mitchellh/mapstructure"
 
-	"github.com/anchore/syft/syft/cataloger/common"
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/cataloger/common"
+	"github.com/zj1244/syft/syft/pkg"
 )
 
 // integrity check

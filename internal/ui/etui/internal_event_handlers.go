@@ -6,11 +6,11 @@ import (
 	"io"
 	"sync"
 
-	"github.com/anchore/syft/internal"
-	syftEventParsers "github.com/anchore/syft/syft/event/parsers"
 	"github.com/gookit/color"
 	"github.com/wagoodman/go-partybus"
 	"github.com/wagoodman/jotframe/pkg/frame"
+	"github.com/zj1244/syft/internal"
+	syftEventParsers "github.com/zj1244/syft/syft/event/parsers"
 )
 
 // appUpdateAvailableHandler is a UI handler function to display a new application version to the top of the screen.

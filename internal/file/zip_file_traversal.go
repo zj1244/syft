@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/anchore/syft/internal/log"
+	"github.com/zj1244/syft/internal/log"
 )
 
 const (

@@ -10,9 +10,9 @@ import (
 	"strings"
 
 	"github.com/alecthomas/jsonschema"
-	"github.com/anchore/syft/internal"
-	"github.com/anchore/syft/syft/pkg"
-	jsonPresenter "github.com/anchore/syft/syft/presenter/json"
+	"github.com/zj1244/syft/internal"
+	"github.com/zj1244/syft/syft/pkg"
+	jsonPresenter "github.com/zj1244/syft/syft/presenter/json"
 )
 
 /*

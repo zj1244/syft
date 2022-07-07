@@ -4,8 +4,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/anchore/syft/syft/distro"
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/distro"
+	"github.com/zj1244/syft/syft/pkg"
 	"github.com/package-url/packageurl-go"
 )
 

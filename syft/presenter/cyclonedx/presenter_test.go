@@ -11,9 +11,9 @@ import (
 	"github.com/anchore/stereoscope/pkg/imagetest"
 
 	"github.com/anchore/go-testutils"
-	"github.com/anchore/syft/syft/pkg"
-	"github.com/anchore/syft/syft/source"
 	"github.com/sergi/go-diff/diffmatchpatch"
+	"github.com/zj1244/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/source"
 )
 
 var update = flag.Bool("update", false, "update the *.golden files for json presenters")

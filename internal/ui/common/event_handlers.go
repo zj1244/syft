@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	syftEventParsers "github.com/anchore/syft/syft/event/parsers"
 	"github.com/wagoodman/go-partybus"
+	syftEventParsers "github.com/zj1244/syft/syft/event/parsers"
 )
 
 // CatalogerFinishedHandler is a UI function for processing the CatalogerFinished bus event, displaying the catalog

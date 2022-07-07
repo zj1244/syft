@@ -6,9 +6,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/anchore/syft/internal"
+	"github.com/zj1244/syft/internal"
 
-	"github.com/anchore/syft/syft/source"
+	"github.com/zj1244/syft/syft/source"
 )
 
 func TestIdentifyDistro(t *testing.T) {

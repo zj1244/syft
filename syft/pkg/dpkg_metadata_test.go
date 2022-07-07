@@ -3,8 +3,8 @@ package pkg
 import (
 	"testing"
 
-	"github.com/anchore/syft/syft/distro"
 	"github.com/sergi/go-diff/diffmatchpatch"
+	"github.com/zj1244/syft/syft/distro"
 )
 
 func TestDpkgMetadata_pURL(t *testing.T) {

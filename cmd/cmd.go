@@ -4,17 +4,17 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/anchore/stereoscope"
-	"github.com/anchore/syft/internal/config"
-	"github.com/anchore/syft/internal/log"
-	"github.com/anchore/syft/internal/logger"
-	"github.com/anchore/syft/syft"
-	"github.com/anchore/syft/syft/presenter"
-	"github.com/anchore/syft/syft/source"
 	"github.com/gookit/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/wagoodman/go-partybus"
+	"github.com/anchore/stereoscope"
+	"github.com/zj1244/syft/internal/config"
+	"github.com/zj1244/syft/internal/log"
+	"github.com/zj1244/syft/internal/logger"
+	"github.com/zj1244/syft/syft"
+	"github.com/zj1244/syft/syft/presenter"
+	"github.com/zj1244/syft/syft/source"
 )
 
 var appConfig *config.Application

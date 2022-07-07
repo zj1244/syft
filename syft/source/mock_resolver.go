@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/anchore/syft/internal/file"
+	"github.com/zj1244/syft/internal/file"
 )
 
 var _ Resolver = (*MockResolver)(nil)

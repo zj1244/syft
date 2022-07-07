@@ -5,11 +5,11 @@ import (
 	"testing"
 
 	"github.com/anchore/stereoscope/pkg/imagetest"
-	"github.com/anchore/syft/syft"
-	"github.com/anchore/syft/syft/pkg"
-	"github.com/anchore/syft/syft/presenter/json"
-	"github.com/anchore/syft/syft/source"
 	"github.com/go-test/deep"
+	"github.com/zj1244/syft/syft"
+	"github.com/zj1244/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/presenter/json"
+	"github.com/zj1244/syft/syft/source"
 )
 
 func TestCatalogFromJSON(t *testing.T) {

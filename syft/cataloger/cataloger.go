@@ -6,16 +6,16 @@ catalogers defined in child packages as well as the interface definition to impl
 package cataloger
 
 import (
-	"github.com/anchore/syft/syft/cataloger/apkdb"
-	"github.com/anchore/syft/syft/cataloger/deb"
-	"github.com/anchore/syft/syft/cataloger/golang"
-	"github.com/anchore/syft/syft/cataloger/java"
-	"github.com/anchore/syft/syft/cataloger/javascript"
-	"github.com/anchore/syft/syft/cataloger/python"
-	"github.com/anchore/syft/syft/cataloger/rpmdb"
-	"github.com/anchore/syft/syft/cataloger/ruby"
-	"github.com/anchore/syft/syft/pkg"
-	"github.com/anchore/syft/syft/source"
+	"github.com/zj1244/syft/syft/cataloger/apkdb"
+	"github.com/zj1244/syft/syft/cataloger/deb"
+	"github.com/zj1244/syft/syft/cataloger/golang"
+	"github.com/zj1244/syft/syft/cataloger/java"
+	"github.com/zj1244/syft/syft/cataloger/javascript"
+	"github.com/zj1244/syft/syft/cataloger/python"
+	"github.com/zj1244/syft/syft/cataloger/rpmdb"
+	"github.com/zj1244/syft/syft/cataloger/ruby"
+	"github.com/zj1244/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/source"
 )
 
 // Cataloger describes behavior for an object to participate in parsing container image or file system

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/anchore/syft/syft/source"
+	"github.com/zj1244/syft/syft/source"
 )
 
 // Source object represents the thing that was cataloged

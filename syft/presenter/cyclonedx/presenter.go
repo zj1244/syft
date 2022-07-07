@@ -7,8 +7,8 @@ import (
 	"encoding/xml"
 	"io"
 
-	"github.com/anchore/syft/syft/pkg"
-	"github.com/anchore/syft/syft/source"
+	"github.com/zj1244/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/source"
 )
 
 // Presenter writes a CycloneDX report from the given Catalog and Locations contents

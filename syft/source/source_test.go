@@ -5,9 +5,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/anchore/stereoscope/pkg/image"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/afero"
+	"github.com/anchore/stereoscope/pkg/image"
 )
 
 func TestNewFromImageFails(t *testing.T) {

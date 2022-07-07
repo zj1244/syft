@@ -6,7 +6,7 @@ package pkg
 import (
 	"fmt"
 
-	"github.com/anchore/syft/syft/source"
+	"github.com/zj1244/syft/syft/source"
 )
 
 // ID represents a unique value for each package added to a package catalog.

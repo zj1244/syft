@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/anchore/syft/internal/log"
-	"github.com/anchore/syft/syft/cataloger/common"
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/internal/log"
+	"github.com/zj1244/syft/syft/cataloger/common"
+	"github.com/zj1244/syft/syft/pkg"
 	"github.com/mitchellh/mapstructure"
 )
 

@@ -1,15 +1,15 @@
 package cataloger
 
 import (
-	"github.com/anchore/syft/internal/bus"
-	"github.com/anchore/syft/internal/log"
-	"github.com/anchore/syft/syft/distro"
-	"github.com/anchore/syft/syft/event"
-	"github.com/anchore/syft/syft/pkg"
-	"github.com/anchore/syft/syft/source"
 	"github.com/hashicorp/go-multierror"
 	"github.com/wagoodman/go-partybus"
 	"github.com/wagoodman/go-progress"
+	"github.com/zj1244/syft/internal/bus"
+	"github.com/zj1244/syft/internal/log"
+	"github.com/zj1244/syft/syft/distro"
+	"github.com/zj1244/syft/syft/event"
+	"github.com/zj1244/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/source"
 )
 
 // Monitor provides progress-related data for observing the progress of a Catalog() call (published on the event bus).
@@ -58,7 +58,7 @@ func Catalog(resolver source.Resolver, theDistro *distro.Distro, catalogers ...C
 
 		for _, p := range packages {
 			// generate CPEs
-			p.CPEs = generatePackageCPEs(p)
+			p.CPEs = GeneratePackageCPEs(p)
 
 			// generate PURL
 			p.PURL = generatePackageURL(p, theDistro)

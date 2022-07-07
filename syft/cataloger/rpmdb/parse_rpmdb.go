@@ -7,10 +7,10 @@ import (
 	"os"
 
 	rpmdb "github.com/anchore/go-rpmdb/pkg"
-	"github.com/anchore/syft/internal"
-	"github.com/anchore/syft/internal/log"
-	"github.com/anchore/syft/syft/pkg"
-	"github.com/anchore/syft/syft/source"
+	"github.com/zj1244/syft/internal"
+	"github.com/zj1244/syft/internal/log"
+	"github.com/zj1244/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/source"
 )
 
 // parseApkDb parses an "Packages" RPM DB and returns the Packages listed within it.

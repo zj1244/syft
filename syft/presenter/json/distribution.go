@@ -1,6 +1,6 @@
 package json
 
-import "github.com/anchore/syft/syft/distro"
+import "github.com/zj1244/syft/syft/distro"
 
 // Distribution provides information about a detected Linux Distribution.
 type Distribution struct {

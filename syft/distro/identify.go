@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/anchore/syft/internal/log"
-	"github.com/anchore/syft/syft/source"
+	"github.com/zj1244/syft/internal/log"
+	"github.com/zj1244/syft/syft/source"
 )
 
 // returns a distro or nil

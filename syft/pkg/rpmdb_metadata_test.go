@@ -3,7 +3,7 @@ package pkg
 import (
 	"testing"
 
-	"github.com/anchore/syft/syft/distro"
+	"github.com/zj1244/syft/syft/distro"
 	"github.com/sergi/go-diff/diffmatchpatch"
 )
 

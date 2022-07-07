@@ -4,9 +4,9 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/anchore/syft/syft/source"
+	"github.com/zj1244/syft/syft/source"
 
-	"github.com/anchore/syft/internal/log"
+	"github.com/zj1244/syft/internal/log"
 )
 
 var nextPackageID int64

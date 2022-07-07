@@ -6,8 +6,8 @@ import (
 	"io"
 	"strings"
 
-	"github.com/anchore/syft/syft/cataloger/common"
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/cataloger/common"
+	"github.com/zj1244/syft/syft/pkg"
 )
 
 // integrity check

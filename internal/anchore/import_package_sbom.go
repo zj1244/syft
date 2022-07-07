@@ -10,14 +10,14 @@ import (
 
 	"github.com/wagoodman/go-progress"
 
-	jsonPresenter "github.com/anchore/syft/syft/presenter/json"
+	jsonPresenter "github.com/zj1244/syft/syft/presenter/json"
 
-	"github.com/anchore/syft/syft/distro"
-	"github.com/anchore/syft/syft/source"
+	"github.com/zj1244/syft/syft/distro"
+	"github.com/zj1244/syft/syft/source"
 
 	"github.com/anchore/client-go/pkg/external"
-	"github.com/anchore/syft/internal/log"
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/internal/log"
+	"github.com/zj1244/syft/syft/pkg"
 )
 
 type packageSBOMImportAPI interface {

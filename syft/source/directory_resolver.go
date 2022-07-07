@@ -7,9 +7,9 @@ import (
 	"path"
 	"path/filepath"
 
-	"github.com/anchore/stereoscope/pkg/file"
-	"github.com/anchore/syft/internal/log"
 	"github.com/bmatcuk/doublestar/v2"
+	"github.com/anchore/stereoscope/pkg/file"
+	"github.com/zj1244/syft/internal/log"
 )
 
 var _ Resolver = (*DirectoryResolver)(nil)

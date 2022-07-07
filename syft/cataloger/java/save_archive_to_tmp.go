@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/anchore/syft/internal/log"
+	"github.com/zj1244/syft/internal/log"
 )
 
 func saveArchiveToTmp(reader io.Reader) (string, string, func(), error) {

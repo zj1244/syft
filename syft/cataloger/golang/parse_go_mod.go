@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"sort"
 
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/pkg"
 	"golang.org/x/mod/modfile"
 )
 

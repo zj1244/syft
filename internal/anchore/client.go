@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/anchore/client-go/pkg/external"
-	"github.com/anchore/syft/internal"
-	"github.com/anchore/syft/internal/version"
+	"github.com/zj1244/syft/internal"
+	"github.com/zj1244/syft/internal/version"
 )
 
 type Configuration struct {

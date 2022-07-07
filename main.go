@@ -6,7 +6,7 @@ Note that Syft is both a command line tool as well as a library. See the syft/ c
 package main
 
 import (
-	"github.com/anchore/syft/cmd"
+	"github.com/zj1244/syft/cmd"
 )
 
 func main() {

@@ -9,14 +9,14 @@ import (
 	"github.com/antihax/optional"
 
 	"github.com/anchore/client-go/pkg/external"
-	"github.com/anchore/stereoscope/pkg/image"
-	"github.com/anchore/syft/internal/bus"
-	"github.com/anchore/syft/syft/distro"
-	"github.com/anchore/syft/syft/event"
-	"github.com/anchore/syft/syft/pkg"
-	"github.com/anchore/syft/syft/source"
 	"github.com/wagoodman/go-partybus"
 	"github.com/wagoodman/go-progress"
+	"github.com/anchore/stereoscope/pkg/image"
+	"github.com/zj1244/syft/internal/bus"
+	"github.com/zj1244/syft/syft/distro"
+	"github.com/zj1244/syft/syft/event"
+	"github.com/zj1244/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/source"
 )
 
 type ImportConfig struct {

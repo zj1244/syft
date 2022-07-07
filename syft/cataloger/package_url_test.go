@@ -3,8 +3,8 @@ package cataloger
 import (
 	"testing"
 
-	"github.com/anchore/syft/syft/distro"
-	"github.com/anchore/syft/syft/pkg"
+	"github.com/zj1244/syft/syft/distro"
+	"github.com/zj1244/syft/syft/pkg"
 	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
@@ -16,11 +16,11 @@ func TestPackageURL(t *testing.T) {
 	}{
 		{
 			pkg: pkg.Package{
-				Name:    "github.com/anchore/syft",
+				Name:    "github.com/zj1244/syft",
 				Version: "v0.1.0",
 				Type:    pkg.GoModulePkg,
 			},
-			expected: "pkg:golang/github.com/anchore/syft@v0.1.0",
+			expected: "pkg:golang/github.com/zj1244/syft@v0.1.0",
 		},
 		{
 			pkg: pkg.Package{

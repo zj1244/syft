@@ -1,9 +1,9 @@
 package ui
 
 import (
-	"github.com/anchore/syft/internal/log"
-	"github.com/anchore/syft/internal/ui/common"
-	syftEvent "github.com/anchore/syft/syft/event"
+	"github.com/zj1244/syft/internal/log"
+	"github.com/zj1244/syft/internal/ui/common"
+	syftEvent "github.com/zj1244/syft/syft/event"
 	"github.com/wagoodman/go-partybus"
 )
 

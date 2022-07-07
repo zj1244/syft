@@ -4,8 +4,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/anchore/syft/syft/pkg"
 	"github.com/go-test/deep"
+	"github.com/zj1244/syft/syft/pkg"
 )
 
 func TestParsePackageJSON(t *testing.T) {
@@ -143,7 +143,7 @@ func TestParsePackageJSON(t *testing.T) {
 	}
 }
 
-func TestParsePackageJSON_Partial(t *testing.T) { // see https://github.com/anchore/syft/issues/311
+func TestParsePackageJSON_Partial(t *testing.T) { // see https://github.com/zj1244/syft/issues/311
 	const fixtureFile = "test-fixtures/pkg-json/package-partial.json"
 	fixture, err := os.Open(fixtureFile)
 	if err != nil {

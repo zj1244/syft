@@ -5,9 +5,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/anchore/syft/internal"
-	"github.com/anchore/syft/syft/pkg"
 	"github.com/facebookincubator/nvdtools/wfn"
+	"github.com/zj1244/syft/internal"
+	"github.com/zj1244/syft/syft/pkg"
 )
 
 // this is functionally equivalent to "*" and consistent with no input given (thus easier to test)
@@ -24,8 +24,8 @@ func newCPE(product, vendor, version, targetSW string) wfn.Attributes {
 	return cpe
 }
 
-// generatePackageCPEs Create a list of CPEs, trying to guess the vendor, product tuple and setting TargetSoftware if possible
-func generatePackageCPEs(p pkg.Package) []pkg.CPE {
+// GeneratePackageCPEs Create a list of CPEs, trying to guess the vendor, product tuple and setting TargetSoftware if possible
+func GeneratePackageCPEs(p pkg.Package) []pkg.CPE {
 	targetSws := candidateTargetSoftwareAttrs(p)
 	vendors := candidateVendors(p)
 	products := candidateProducts(p)

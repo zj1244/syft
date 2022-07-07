@@ -8,9 +8,9 @@ import (
 
 	"github.com/wagoodman/go-progress"
 
-	"github.com/anchore/syft/syft/cataloger"
-	"github.com/anchore/syft/syft/event"
-	"github.com/anchore/syft/syft/presenter"
+	"github.com/zj1244/syft/syft/cataloger"
+	"github.com/zj1244/syft/syft/event"
+	"github.com/zj1244/syft/syft/presenter"
 	"github.com/wagoodman/go-partybus"
 )
 

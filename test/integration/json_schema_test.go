@@ -9,15 +9,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/anchore/syft/internal"
+	"github.com/zj1244/syft/internal"
 
-	"github.com/anchore/syft/syft/distro"
-	"github.com/anchore/syft/syft/presenter"
+	"github.com/zj1244/syft/syft/distro"
+	"github.com/zj1244/syft/syft/presenter"
 
 	"github.com/anchore/stereoscope/pkg/imagetest"
-	"github.com/anchore/syft/syft"
-	"github.com/anchore/syft/syft/source"
 	"github.com/xeipuuv/gojsonschema"
+	"github.com/zj1244/syft/syft"
+	"github.com/zj1244/syft/syft/source"
 )
 
 const jsonSchemaPath = "schema/json"

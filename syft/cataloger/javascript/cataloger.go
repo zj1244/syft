@@ -4,7 +4,7 @@ Package javascript provides a concrete Cataloger implementation for JavaScript e
 package javascript
 
 import (
-	"github.com/anchore/syft/syft/cataloger/common"
+	"github.com/zj1244/syft/syft/cataloger/common"
 )
 
 // NewJavascriptPackageCataloger returns a new JavaScript cataloger object based on detection of npm based packages.
