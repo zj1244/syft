@@ -1,9 +1,18 @@
 package pkg
 
 import (
-	"github.com/package-url/packageurl-go"
+	"sort"
+
+	"github.com/zj1244/syft/syft/file"
+
+	"github.com/anchore/packageurl-go"
+	"github.com/scylladb/go-set/strset"
 	"github.com/zj1244/syft/syft/distro"
 )
+
+const DpkgDBGlob = "**/var/lib/dpkg/{status,status.d/**}"
+
+var _ FileOwner = (*DpkgMetadata)(nil)
 
 // DpkgMetadata represents all captured data for a Debian package DB entry; available fields are described
 // at http://manpages.ubuntu.com/manpages/xenial/man1/dpkg-query.1.html in the --showformat section.
@@ -20,8 +29,9 @@ type DpkgMetadata struct {
 
 // DpkgFileRecord represents a single file attributed to a debian package.
 type DpkgFileRecord struct {
-	Path string `json:"path"`
-	MD5  string `json:"md5"`
+	Path         string       `json:"path"`
+	Digest       *file.Digest `json:"digest,omitempty"`
+	IsConfigFile bool         `json:"isConfigFile"`
 }
 
 // PackageURL returns the PURL for the specific Debian package (see https://github.com/package-url/purl-spec)
@@ -31,6 +41,7 @@ func (m DpkgMetadata) PackageURL(d *distro.Distro) string {
 	}
 	pURL := packageurl.NewPackageURL(
 		// TODO: replace with `packageurl.TypeDebian` upon merge of https://github.com/package-url/packageurl-go/pull/21
+		// TODO: or, since we're now using an Anchore fork of this module, we could do this sooner.
 		"deb",
 		d.Type.String(),
 		m.Package,
@@ -43,4 +54,16 @@ func (m DpkgMetadata) PackageURL(d *distro.Distro) string {
 		},
 		"")
 	return pURL.ToString()
+}
+
+func (m DpkgMetadata) OwnedFiles() (result []string) {
+	s := strset.New()
+	for _, f := range m.Files {
+		if f.Path != "" {
+			s.Add(f.Path)
+		}
+	}
+	result = s.List()
+	sort.Strings(result)
+	return
 }

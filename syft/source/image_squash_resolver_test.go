@@ -3,6 +3,9 @@ package source
 import (
 	"testing"
 
+	"github.com/scylladb/go-set/strset"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/anchore/stereoscope/pkg/imagetest"
 )
 
@@ -62,10 +65,9 @@ func TestImageSquashResolver_FilesByPath(t *testing.T) {
 	}
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			img, cleanup := imagetest.GetFixtureImage(t, "docker-archive", "image-symlinks")
-			defer cleanup()
+			img := imagetest.GetFixtureImage(t, "docker-archive", "image-symlinks")
 
-			resolver, err := NewImageSquashResolver(img)
+			resolver, err := newImageSquashResolver(img)
 			if err != nil {
 				t.Fatalf("could not create resolver: %+v", err)
 			}
@@ -179,10 +181,9 @@ func TestImageSquashResolver_FilesByGlob(t *testing.T) {
 	}
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			img, cleanup := imagetest.GetFixtureImage(t, "docker-archive", "image-symlinks")
-			defer cleanup()
+			img := imagetest.GetFixtureImage(t, "docker-archive", "image-symlinks")
 
-			resolver, err := NewImageSquashResolver(img)
+			resolver, err := newImageSquashResolver(img)
 			if err != nil {
 				t.Fatalf("could not create resolver: %+v", err)
 			}
@@ -226,4 +227,64 @@ func TestImageSquashResolver_FilesByGlob(t *testing.T) {
 			}
 		})
 	}
+}
+
+func Test_imageSquashResolver_FilesByMIMEType(t *testing.T) {
+
+	tests := []struct {
+		fixtureName   string
+		mimeType      string
+		expectedPaths *strset.Set
+	}{
+		{
+			fixtureName:   "image-simple",
+			mimeType:      "text/plain",
+			expectedPaths: strset.New("/somefile-1.txt", "/somefile-2.txt", "/really/nested/file-3.txt"),
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.fixtureName, func(t *testing.T) {
+			img := imagetest.GetFixtureImage(t, "docker-archive", test.fixtureName)
+
+			resolver, err := newImageSquashResolver(img)
+			assert.NoError(t, err)
+
+			locations, err := resolver.FilesByMIMEType(test.mimeType)
+			assert.NoError(t, err)
+
+			assert.Equal(t, test.expectedPaths.Size(), len(locations))
+			for _, l := range locations {
+				assert.True(t, test.expectedPaths.Has(l.RealPath), "does not have path %q", l.RealPath)
+			}
+		})
+	}
+}
+
+func Test_imageSquashResolver_hasFilesystemIDInLocation(t *testing.T) {
+	img := imagetest.GetFixtureImage(t, "docker-archive", "image-duplicate-path")
+
+	resolver, err := newImageSquashResolver(img)
+	assert.NoError(t, err)
+
+	locations, err := resolver.FilesByMIMEType("text/plain")
+	assert.NoError(t, err)
+	assert.NotEmpty(t, locations)
+	for _, location := range locations {
+		assert.NotEmpty(t, location.FileSystemID)
+	}
+
+	locations, err = resolver.FilesByGlob("*.txt")
+	assert.NoError(t, err)
+	assert.NotEmpty(t, locations)
+	for _, location := range locations {
+		assert.NotEmpty(t, location.FileSystemID)
+	}
+
+	locations, err = resolver.FilesByPath("/somefile-1.txt")
+	assert.NoError(t, err)
+	assert.NotEmpty(t, locations)
+	for _, location := range locations {
+		assert.NotEmpty(t, location.FileSystemID)
+	}
+
 }

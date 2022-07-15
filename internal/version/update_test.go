@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	hashiVersion "github.com/anchore/go-testutils"
+	hashiVersion "github.com/anchore/go-version"
 )
 
 func TestIsUpdateAvailable(t *testing.T) {
@@ -75,6 +75,15 @@ func TestIsUpdateAvailable(t *testing.T) {
 		{
 			name:          "NoBuildVersion",
 			buildVersion:  valueNotProvided,
+			latestVersion: "1.0.0",
+			code:          200,
+			isAvailable:   false,
+			newVersion:    "",
+			err:           false,
+		},
+		{
+			name:          "SnapshotBuildVersion",
+			buildVersion:  "2.0.0-SHAPSHOT-a78bf9c",
 			latestVersion: "1.0.0",
 			code:          200,
 			isAvailable:   false,

@@ -9,18 +9,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/wagoodman/go-progress"
-
-	jsonPresenter "github.com/zj1244/syft/syft/presenter/json"
-
-	"github.com/zj1244/syft/syft/distro"
-
-	"github.com/docker/docker/pkg/ioutils"
+	"github.com/zj1244/syft/syft/sbom"
 
 	"github.com/anchore/client-go/pkg/external"
-	"github.com/go-test/deep"
+	"github.com/zj1244/syft/internal/formats/syftjson"
+	syftjsonModel "github.com/zj1244/syft/internal/formats/syftjson/model"
+	"github.com/zj1244/syft/syft/distro"
 	"github.com/zj1244/syft/syft/pkg"
 	"github.com/zj1244/syft/syft/source"
+	"github.com/docker/docker/pkg/ioutils"
+	"github.com/go-test/deep"
+	"github.com/wagoodman/go-progress"
 )
 
 func must(c pkg.CPE, e error) pkg.CPE {
@@ -38,7 +37,6 @@ func TestPackageSbomToModel(t *testing.T) {
 		Scheme: source.ImageScheme,
 		ImageMetadata: source.ImageMetadata{
 			UserInput: "user-in",
-			Scope:     "scope!",
 			Layers: []source.LayerMetadata{
 				{
 					MediaType: "layer-metadata-type!",
@@ -76,7 +74,15 @@ func TestPackageSbomToModel(t *testing.T) {
 
 	c := pkg.NewCatalog(p)
 
-	model, err := packageSbomModel(m, c, &d)
+	sbomResult := sbom.SBOM{
+		Artifacts: sbom.Artifacts{
+			PackageCatalog: c,
+			Distro:         &d,
+		},
+		Source: m,
+	}
+
+	model, err := packageSbomModel(sbomResult)
 	if err != nil {
 		t.Fatalf("unable to generate model from source material: %+v", err)
 	}
@@ -88,25 +94,37 @@ func TestPackageSbomToModel(t *testing.T) {
 		t.Fatalf("unable to marshal model: %+v", err)
 	}
 
+	s := sbom.SBOM{
+		Artifacts: sbom.Artifacts{
+			PackageCatalog: c,
+			Distro:         &d,
+		},
+		Source: m,
+	}
+
 	var buf bytes.Buffer
-	pres := jsonPresenter.NewPresenter(c, m, &d)
+	pres := syftjson.Format().Presenter(s)
 	if err := pres.Present(&buf); err != nil {
 		t.Fatalf("unable to get expected json: %+v", err)
 	}
 
 	// unmarshal expected result
-	var expectedDoc jsonPresenter.Document
+	var expectedDoc syftjsonModel.Document
 	if err := json.Unmarshal(buf.Bytes(), &expectedDoc); err != nil {
 		t.Fatalf("unable to parse json doc: %+v", err)
 	}
 
 	// unmarshal actual result
-	var actualDoc jsonPresenter.Document
+	var actualDoc syftjsonModel.Document
 	if err := json.Unmarshal(modelJSON, &actualDoc); err != nil {
 		t.Fatalf("unable to parse json doc: %+v", err)
 	}
 
 	for _, d := range deep.Equal(actualDoc, expectedDoc) {
+		if strings.HasSuffix(d, "<nil slice> != []") {
+			// do not consider nil vs empty collection semantics as a "difference"
+			continue
+		}
 		t.Errorf("diff: %+v", d)
 	}
 }
@@ -174,10 +192,9 @@ func TestPackageSbomImport(t *testing.T) {
 	})
 
 	m := source.Metadata{
-		Scheme: "a-schema",
+		Scheme: source.ImageScheme,
 		ImageMetadata: source.ImageMetadata{
 			UserInput:      "user-in",
-			Scope:          "scope!",
 			Layers:         nil,
 			Size:           10,
 			ManifestDigest: "sha256:digest!",
@@ -188,7 +205,15 @@ func TestPackageSbomImport(t *testing.T) {
 
 	d, _ := distro.NewDistro(distro.CentOS, "8.0", "")
 
-	theModel, err := packageSbomModel(m, catalog, &d)
+	sbomResult := sbom.SBOM{
+		Artifacts: sbom.Artifacts{
+			PackageCatalog: catalog,
+			Distro:         &d,
+		},
+		Source: m,
+	}
+
+	theModel, err := packageSbomModel(sbomResult)
 	if err != nil {
 		t.Fatalf("could not get sbom model: %+v", err)
 	}
@@ -227,7 +252,7 @@ func TestPackageSbomImport(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 
-			digest, err := importPackageSBOM(context.TODO(), test.api, sessionID, m, catalog, &d, &progress.Stage{})
+			digest, err := importPackageSBOM(context.TODO(), test.api, sessionID, sbomResult, &progress.Stage{})
 
 			// validate error handling
 			if err != nil && !test.expectsError {

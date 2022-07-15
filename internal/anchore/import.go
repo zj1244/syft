@@ -6,26 +6,22 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/antihax/optional"
-
 	"github.com/anchore/client-go/pkg/external"
+	"github.com/anchore/stereoscope/pkg/image"
+	"github.com/antihax/optional"
 	"github.com/wagoodman/go-partybus"
 	"github.com/wagoodman/go-progress"
-	"github.com/anchore/stereoscope/pkg/image"
 	"github.com/zj1244/syft/internal/bus"
-	"github.com/zj1244/syft/syft/distro"
 	"github.com/zj1244/syft/syft/event"
-	"github.com/zj1244/syft/syft/pkg"
-	"github.com/zj1244/syft/syft/source"
+	"github.com/zj1244/syft/syft/sbom"
 )
 
 type ImportConfig struct {
 	ImageMetadata           image.Metadata
-	SourceMetadata          source.Metadata
-	Catalog                 *pkg.Catalog
-	Distro                  *distro.Distro
+	SBOM                    sbom.SBOM
 	Dockerfile              []byte
 	OverwriteExistingUpload bool
+	Timeout                 uint
 }
 
 func importProgress(source string) (*progress.Stage, *progress.Manual) {
@@ -51,9 +47,10 @@ func importProgress(source string) (*progress.Stage, *progress.Manual) {
 
 // nolint:funlen
 func (c *Client) Import(ctx context.Context, cfg ImportConfig) error {
-	stage, prog := importProgress(c.config.Hostname)
+	stage, prog := importProgress(c.config.BaseURL)
 
-	ctxWithTimeout, cancel := context.WithTimeout(ctx, time.Second*30)
+	timeout := time.Duration(cfg.Timeout) * time.Second
+	ctxWithTimeout, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
 	authedCtx := c.newRequestContext(ctxWithTimeout)
@@ -71,19 +68,19 @@ func (c *Client) Import(ctx context.Context, cfg ImportConfig) error {
 	prog.N++
 	sessionID := startOperation.Uuid
 
-	packageDigest, err := importPackageSBOM(authedCtx, c.client.ImportsApi, sessionID, cfg.SourceMetadata, cfg.Catalog, cfg.Distro, stage)
+	packageDigest, err := importPackageSBOM(authedCtx, c.client.ImportsApi, sessionID, cfg.SBOM, stage)
 	if err != nil {
 		return fmt.Errorf("failed to import Package SBOM: %w", err)
 	}
 	prog.N++
 
-	manifestDigest, err := importManifest(authedCtx, c.client.ImportsApi, sessionID, cfg.ImageMetadata.RawManifest, stage)
+	manifestDigest, err := importManifest(authedCtx, c.client.ImportsApi, sessionID, cfg.SBOM.Source.ImageMetadata.RawManifest, stage)
 	if err != nil {
 		return fmt.Errorf("failed to import Manifest: %w", err)
 	}
 	prog.N++
 
-	configDigest, err := importConfig(authedCtx, c.client.ImportsApi, sessionID, cfg.ImageMetadata.RawConfig, stage)
+	configDigest, err := importConfig(authedCtx, c.client.ImportsApi, sessionID, cfg.SBOM.Source.ImageMetadata.RawConfig, stage)
 	if err != nil {
 		return fmt.Errorf("failed to import Config: %w", err)
 	}

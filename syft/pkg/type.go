@@ -1,6 +1,6 @@
 package pkg
 
-import "github.com/package-url/packageurl-go"
+import "github.com/anchore/packageurl-go"
 
 // Type represents a Package Type for or within a language ecosystem (there may be multiple package types within a language ecosystem)
 type Type string
@@ -14,9 +14,12 @@ const (
 	RpmPkg           Type = "rpm"
 	NpmPkg           Type = "npm"
 	PythonPkg        Type = "python"
+	PhpComposerPkg   Type = "php-composer"
 	JavaPkg          Type = "java-archive"
 	JenkinsPluginPkg Type = "jenkins-plugin"
 	GoModulePkg      Type = "go-module"
+	RustPkg          Type = "rust-crate"
+	KbPkg            Type = "msrc-kb"
 )
 
 // AllPkgs represents all supported package types
@@ -27,9 +30,12 @@ var AllPkgs = []Type{
 	RpmPkg,
 	NpmPkg,
 	PythonPkg,
+	PhpComposerPkg,
 	JavaPkg,
 	JenkinsPluginPkg,
 	GoModulePkg,
+	RustPkg,
+	KbPkg,
 }
 
 // PackageURLType returns the PURL package type for the current package.
@@ -43,6 +49,8 @@ func (t Type) PackageURLType() string {
 		return "deb"
 	case PythonPkg:
 		return packageurl.TypePyPi
+	case PhpComposerPkg:
+		return packageurl.TypeComposer
 	case NpmPkg:
 		return packageurl.TypeNPM
 	case JavaPkg, JenkinsPluginPkg:
@@ -51,6 +59,8 @@ func (t Type) PackageURLType() string {
 		return packageurl.TypeRPM
 	case GoModulePkg:
 		return packageurl.TypeGolang
+	case RustPkg:
+		return "cargo"
 	default:
 		// TODO: should this be a "generic" purl type instead?
 		return ""

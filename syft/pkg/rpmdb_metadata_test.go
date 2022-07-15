@@ -1,10 +1,13 @@
 package pkg
 
 import (
+	"strings"
 	"testing"
 
-	"github.com/zj1244/syft/syft/distro"
+	"github.com/go-test/deep"
+
 	"github.com/sergi/go-diff/diffmatchpatch"
+	"github.com/zj1244/syft/syft/distro"
 )
 
 func TestRpmMetadata_pURL(t *testing.T) {
@@ -22,9 +25,9 @@ func TestRpmMetadata_pURL(t *testing.T) {
 				Version: "v",
 				Arch:    "a",
 				Release: "r",
-				Epoch:   1,
+				Epoch:   intRef(1),
 			},
-			expected: "pkg:rpm/centos/p@1:v-r?arch=a",
+			expected: "pkg:rpm/centos/p@v-r?arch=a&epoch=1",
 		},
 		{
 			distro: distro.Distro{
@@ -35,9 +38,9 @@ func TestRpmMetadata_pURL(t *testing.T) {
 				Version: "v",
 				Arch:    "a",
 				Release: "r",
-				Epoch:   1,
+				Epoch:   nil,
 			},
-			expected: "pkg:rpm/redhat/p@1:v-r?arch=a",
+			expected: "pkg:rpm/redhat/p@v-r?arch=a",
 		},
 	}
 
@@ -51,4 +54,50 @@ func TestRpmMetadata_pURL(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestRpmMetadata_FileOwner(t *testing.T) {
+	tests := []struct {
+		metadata RpmdbMetadata
+		expected []string
+	}{
+		{
+			metadata: RpmdbMetadata{
+				Files: []RpmdbFileRecord{
+					{Path: "/somewhere"},
+					{Path: "/else"},
+				},
+			},
+			expected: []string{
+				"/else",
+				"/somewhere",
+			},
+		},
+		{
+			metadata: RpmdbMetadata{
+				Files: []RpmdbFileRecord{
+					{Path: "/somewhere"},
+					{Path: ""},
+				},
+			},
+			expected: []string{
+				"/somewhere",
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(strings.Join(test.expected, ","), func(t *testing.T) {
+			var i interface{}
+			i = test.metadata
+			actual := i.(FileOwner).OwnedFiles()
+			for _, d := range deep.Equal(test.expected, actual) {
+				t.Errorf("diff: %+v", d)
+			}
+		})
+	}
+}
+
+func intRef(i int) *int {
+	return &i
 }

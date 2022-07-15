@@ -3,6 +3,8 @@ package source
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/anchore/stereoscope/pkg/imagetest"
 )
 
@@ -82,10 +84,9 @@ func TestAllLayersResolver_FilesByPath(t *testing.T) {
 	}
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			img, cleanup := imagetest.GetFixtureImage(t, "docker-archive", "image-symlinks")
-			defer cleanup()
+			img := imagetest.GetFixtureImage(t, "docker-archive", "image-symlinks")
 
-			resolver, err := NewAllLayersResolver(img)
+			resolver, err := newAllLayersResolver(img)
 			if err != nil {
 				t.Fatalf("could not create resolver: %+v", err)
 			}
@@ -201,10 +202,9 @@ func TestAllLayersResolver_FilesByGlob(t *testing.T) {
 	}
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			img, cleanup := imagetest.GetFixtureImage(t, "docker-archive", "image-symlinks")
-			defer cleanup()
+			img := imagetest.GetFixtureImage(t, "docker-archive", "image-symlinks")
 
-			resolver, err := NewAllLayersResolver(img)
+			resolver, err := newAllLayersResolver(img)
 			if err != nil {
 				t.Fatalf("could not create resolver: %+v", err)
 			}
@@ -240,4 +240,64 @@ func TestAllLayersResolver_FilesByGlob(t *testing.T) {
 			}
 		})
 	}
+}
+
+func Test_imageAllLayersResolver_FilesByMIMEType(t *testing.T) {
+
+	tests := []struct {
+		fixtureName   string
+		mimeType      string
+		expectedPaths []string
+	}{
+		{
+			fixtureName:   "image-duplicate-path",
+			mimeType:      "text/plain",
+			expectedPaths: []string{"/somefile-1.txt", "/somefile-1.txt"},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.fixtureName, func(t *testing.T) {
+			img := imagetest.GetFixtureImage(t, "docker-archive", test.fixtureName)
+
+			resolver, err := newAllLayersResolver(img)
+			assert.NoError(t, err)
+
+			locations, err := resolver.FilesByMIMEType(test.mimeType)
+			assert.NoError(t, err)
+
+			assert.Len(t, test.expectedPaths, len(locations))
+			for idx, l := range locations {
+				assert.Equal(t, test.expectedPaths[idx], l.RealPath, "does not have path %q", l.RealPath)
+			}
+		})
+	}
+}
+
+func Test_imageAllLayersResolver_hasFilesystemIDInLocation(t *testing.T) {
+	img := imagetest.GetFixtureImage(t, "docker-archive", "image-duplicate-path")
+
+	resolver, err := newAllLayersResolver(img)
+	assert.NoError(t, err)
+
+	locations, err := resolver.FilesByMIMEType("text/plain")
+	assert.NoError(t, err)
+	assert.NotEmpty(t, locations)
+	for _, location := range locations {
+		assert.NotEmpty(t, location.FileSystemID)
+	}
+
+	locations, err = resolver.FilesByGlob("*.txt")
+	assert.NoError(t, err)
+	assert.NotEmpty(t, locations)
+	for _, location := range locations {
+		assert.NotEmpty(t, location.FileSystemID)
+	}
+
+	locations, err = resolver.FilesByPath("/somefile-1.txt")
+	assert.NoError(t, err)
+	assert.NotEmpty(t, locations)
+	for _, location := range locations {
+		assert.NotEmpty(t, location.FileSystemID)
+	}
+
 }

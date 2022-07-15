@@ -1,8 +1,17 @@
 package pkg
 
 import (
-	"github.com/package-url/packageurl-go"
+	"sort"
+
+	"github.com/zj1244/syft/syft/file"
+
+	"github.com/anchore/packageurl-go"
+	"github.com/scylladb/go-set/strset"
 )
+
+const ApkDBGlob = "**/lib/apk/db/installed"
+
+var _ FileOwner = (*ApkMetadata)(nil)
 
 // ApkMetadata represents all captured data for a Alpine DB package entry.
 // See the following sources for more information:
@@ -28,11 +37,11 @@ type ApkMetadata struct {
 
 // ApkFileRecord represents a single file listing and metadata from a APK DB entry (which may have many of these file records).
 type ApkFileRecord struct {
-	Path        string `json:"path"`
-	OwnerUID    string `json:"ownerUid,omitempty"`
-	OwnerGID    string `json:"ownerGid,omitempty"`
-	Permissions string `json:"permissions,omitempty"`
-	Checksum    string `json:"checksum,omitempty"`
+	Path        string       `json:"path"`
+	OwnerUID    string       `json:"ownerUid,omitempty"`
+	OwnerGID    string       `json:"ownerGid,omitempty"`
+	Permissions string       `json:"permissions,omitempty"`
+	Digest      *file.Digest `json:"digest,omitempty"`
 }
 
 // PackageURL returns the PURL for the specific Alpine package (see https://github.com/package-url/purl-spec)
@@ -52,4 +61,16 @@ func (m ApkMetadata) PackageURL() string {
 		},
 		"")
 	return pURL.ToString()
+}
+
+func (m ApkMetadata) OwnedFiles() (result []string) {
+	s := strset.New()
+	for _, f := range m.Files {
+		if f.Path != "" {
+			s.Add(f.Path)
+		}
+	}
+	result = s.List()
+	sort.Strings(result)
+	return result
 }

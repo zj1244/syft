@@ -6,12 +6,12 @@ package parsers
 import (
 	"fmt"
 
-	"github.com/wagoodman/go-progress"
-
-	"github.com/zj1244/syft/syft/cataloger"
-	"github.com/zj1244/syft/syft/event"
-	"github.com/zj1244/syft/syft/presenter"
+	"github.com/anchore/go-presenter"
 	"github.com/wagoodman/go-partybus"
+	"github.com/wagoodman/go-progress"
+	"github.com/zj1244/syft/syft/event"
+	"github.com/zj1244/syft/syft/file"
+	"github.com/zj1244/syft/syft/pkg/cataloger"
 )
 
 type ErrBadPayload struct {
@@ -39,8 +39,8 @@ func checkEventType(actual, expected partybus.EventType) error {
 	return nil
 }
 
-func ParseCatalogerStarted(e partybus.Event) (*cataloger.Monitor, error) {
-	if err := checkEventType(e.Type, event.CatalogerStarted); err != nil {
+func ParsePackageCatalogerStarted(e partybus.Event) (*cataloger.Monitor, error) {
+	if err := checkEventType(e.Type, event.PackageCatalogerStarted); err != nil {
 		return nil, err
 	}
 
@@ -52,8 +52,65 @@ func ParseCatalogerStarted(e partybus.Event) (*cataloger.Monitor, error) {
 	return &monitor, nil
 }
 
-func ParseCatalogerFinished(e partybus.Event) (presenter.Presenter, error) {
-	if err := checkEventType(e.Type, event.CatalogerFinished); err != nil {
+func ParseSecretsCatalogingStarted(e partybus.Event) (*file.SecretsMonitor, error) {
+	if err := checkEventType(e.Type, event.SecretsCatalogerStarted); err != nil {
+		return nil, err
+	}
+
+	monitor, ok := e.Value.(file.SecretsMonitor)
+	if !ok {
+		return nil, newPayloadErr(e.Type, "Value", e.Value)
+	}
+
+	return &monitor, nil
+}
+
+func ParseFileMetadataCatalogingStarted(e partybus.Event) (progress.StagedProgressable, error) {
+	if err := checkEventType(e.Type, event.FileMetadataCatalogerStarted); err != nil {
+		return nil, err
+	}
+
+	prog, ok := e.Value.(progress.StagedProgressable)
+	if !ok {
+		return nil, newPayloadErr(e.Type, "Value", e.Value)
+	}
+
+	return prog, nil
+}
+
+func ParseFileDigestsCatalogingStarted(e partybus.Event) (progress.StagedProgressable, error) {
+	if err := checkEventType(e.Type, event.FileDigestsCatalogerStarted); err != nil {
+		return nil, err
+	}
+
+	prog, ok := e.Value.(progress.StagedProgressable)
+	if !ok {
+		return nil, newPayloadErr(e.Type, "Value", e.Value)
+	}
+
+	return prog, nil
+}
+
+func ParseFileIndexingStarted(e partybus.Event) (string, progress.StagedProgressable, error) {
+	if err := checkEventType(e.Type, event.FileIndexingStarted); err != nil {
+		return "", nil, err
+	}
+
+	path, ok := e.Source.(string)
+	if !ok {
+		return "", nil, newPayloadErr(e.Type, "Source", e.Source)
+	}
+
+	prog, ok := e.Value.(progress.StagedProgressable)
+	if !ok {
+		return "", nil, newPayloadErr(e.Type, "Value", e.Value)
+	}
+
+	return path, prog, nil
+}
+
+func ParsePresenterReady(e partybus.Event) (presenter.Presenter, error) {
+	if err := checkEventType(e.Type, event.PresenterReady); err != nil {
 		return nil, err
 	}
 

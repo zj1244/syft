@@ -6,10 +6,14 @@ import (
 	"os"
 	"testing"
 
-	"github.com/zj1244/syft/internal"
+	hashiVer "github.com/hashicorp/go-version"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/zj1244/syft/internal"
 	"github.com/zj1244/syft/syft/source"
 )
+
+const CustomDistro Type = "scientific"
 
 func TestIdentifyDistro(t *testing.T) {
 	tests := []struct {
@@ -67,8 +71,9 @@ func TestIdentifyDistro(t *testing.T) {
 			Type:    UnknownDistroType,
 		},
 		{
-			fixture: "test-fixtures/os/unmatchable",
-			Type:    UnknownDistroType,
+			fixture: "test-fixtures/os/custom",
+			Type:    CustomDistro,
+			Version: "8.0.0",
 		},
 		{
 			fixture: "test-fixtures/os/opensuse-leap",
@@ -76,16 +81,65 @@ func TestIdentifyDistro(t *testing.T) {
 			Version: "15.2.0",
 		},
 		{
+			fixture: "test-fixtures/os/sles",
+			Type:    SLES,
+			Version: "15.2.0",
+		},
+		{
+			fixture: "test-fixtures/os/photon",
+			Type:    Photon,
+			Version: "2.0.0",
+		},
+		{
 			fixture: "test-fixtures/os/arch",
 			Type:    ArchLinux,
+		},
+		{
+			fixture: "test-fixtures/partial-fields/missing-id",
+			Type:    Debian,
+			Version: "8.0.0",
+		},
+		{
+			fixture: "test-fixtures/partial-fields/unknown-id",
+			Type:    Debian,
+			Version: "8.0.0",
+		},
+		{
+			fixture: "test-fixtures/partial-fields/missing-version",
+			Type:    UnknownDistroType,
+		},
+		{
+			fixture: "test-fixtures/os/centos6",
+			Type:    CentOS,
+			Version: "6.0.0",
+		},
+		{
+			fixture: "test-fixtures/os/centos5",
+			Type:    CentOS,
+			Version: "5.7.0",
+		},
+		{
+			fixture: "test-fixtures/os/mariner",
+			Type:    Mariner,
+			Version: "1.0.0",
+		},
+		{
+			fixture: "test-fixtures/os/rockylinux",
+			Type:    RockyLinux,
+			Version: "8.4.0",
 		},
 	}
 
 	observedDistros := internal.NewStringSet()
 	definedDistros := internal.NewStringSet()
+
 	for _, distroType := range All {
 		definedDistros.Add(string(distroType))
 	}
+
+	// Somewhat cheating with Windows. There is no support for detecting/parsing a Windows OS, so it is not
+	// possible to comply with this test unless it is added manually to the "observed distros"
+	definedDistros.Remove(string(Windows))
 
 	for _, test := range tests {
 		t.Run(test.fixture, func(t *testing.T) {
@@ -94,7 +148,12 @@ func TestIdentifyDistro(t *testing.T) {
 				t.Fatalf("unable to produce a new source for testing: %s", test.fixture)
 			}
 
-			d := Identify(s.Resolver)
+			resolver, err := s.FileResolver(source.SquashedScope)
+			if err != nil {
+				t.Fatalf("unable to get resolver: %+v", err)
+			}
+
+			d := Identify(resolver)
 			if d == nil {
 				if test.Type == UnknownDistroType {
 					return
@@ -119,9 +178,7 @@ func TestIdentifyDistro(t *testing.T) {
 				return
 			}
 
-			if d.Version.String() != test.Version {
-				t.Errorf("expected distro version doesn't match: %v != %v", d.Version.String(), test.Version)
-			}
+			assert.Equal(t, d.Version.String(), test.Version)
 		})
 	}
 
@@ -135,7 +192,6 @@ func TestIdentifyDistro(t *testing.T) {
 		}
 		t.Errorf("distro coverage incomplete (defined=%d, coverage=%d)", len(definedDistros), len(observedDistros))
 	}
-
 }
 
 func TestParseOsRelease(t *testing.T) {
@@ -174,18 +230,7 @@ func TestParseOsRelease(t *testing.T) {
 
 	for _, test := range tests {
 		name := fmt.Sprintf("%s:%s", test.name, test.RawVersion)
-		fixture, err := os.Open(test.fixture)
-		if err != nil {
-			t.Fatalf("could not open test fixture=%s: %+v", test.fixture, err)
-		}
-		defer fixture.Close()
-
-		b, err := ioutil.ReadAll(fixture)
-		if err != nil {
-			t.Fatalf("unable to read fixture file: %+v", err)
-		}
-
-		contents := string(b)
+		contents := retrieveFixtureContentsAsString(test.fixture, t)
 
 		t.Run(name, func(t *testing.T) {
 			distro := parseOsRelease(contents)
@@ -214,18 +259,7 @@ func TestParseOsReleaseFailures(t *testing.T) {
 
 	for _, test := range tests {
 		name := fmt.Sprintf("%s:%s", test.name, test.fixture)
-		fixture, err := os.Open(test.fixture)
-		if err != nil {
-			t.Fatalf("could not open test fixture=%s: %+v", test.fixture, err)
-		}
-		defer fixture.Close()
-
-		b, err := ioutil.ReadAll(fixture)
-		if err != nil {
-			t.Fatalf("unable to read fixture file: %+v", err)
-		}
-
-		contents := string(b)
+		contents := retrieveFixtureContentsAsString(test.fixture, t)
 
 		t.Run(name, func(t *testing.T) {
 			distro := parseOsRelease(contents)
@@ -234,5 +268,101 @@ func TestParseOsReleaseFailures(t *testing.T) {
 			}
 		})
 	}
+}
 
+func TestParseSystemReleaseCPE(t *testing.T) {
+	centos6Version, _ := hashiVer.NewVersion("6")
+	tests := []struct {
+		fixture  string
+		name     string
+		expected *Distro
+	}{
+		{
+			fixture: "test-fixtures/os/centos6/etc/system-release-cpe",
+			name:    "Centos 6",
+			expected: &Distro{
+				Type:       CentOS,
+				Version:    centos6Version,
+				RawVersion: "6",
+			},
+		},
+		{
+			fixture:  "test-fixtures/bad-system-release-cpe",
+			name:     "Centos 6 Bad CPE",
+			expected: nil,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			contents := retrieveFixtureContentsAsString(test.fixture, t)
+			actual := parseSystemReleaseCPE(contents)
+
+			if test.expected == nil {
+				assert.Nil(t, actual)
+				return
+			}
+
+			// not comparing the full distro object because the hashiVer is a pointer
+			assert.Equal(t, test.expected.Type, actual.Type)
+			assert.Equal(t, &test.expected.Version, &actual.Version)
+			assert.Equal(t, test.expected.RawVersion, actual.RawVersion)
+		})
+	}
+}
+
+func TestParseRedhatRelease(t *testing.T) {
+	centos5Version, _ := hashiVer.NewVersion("5.7")
+	tests := []struct {
+		fixture  string
+		name     string
+		expected *Distro
+	}{
+		{
+			fixture: "test-fixtures/os/centos5/etc/redhat-release",
+			name:    "Centos 5",
+			expected: &Distro{
+				Type:       CentOS,
+				Version:    centos5Version,
+				RawVersion: "5.7",
+			},
+		},
+		{
+			fixture:  "test-fixtures/bad-redhat-release",
+			name:     "Centos 5 Bad Redhat Release",
+			expected: nil,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			contents := retrieveFixtureContentsAsString(test.fixture, t)
+			actual := parseRedhatRelease(contents)
+
+			if test.expected == nil {
+				assert.Nil(t, actual)
+				return
+			}
+
+			// not comparing the full distro object because the hashiVer is a pointer
+			assert.Equal(t, test.expected.Type, actual.Type)
+			assert.Equal(t, &test.expected.Version, &actual.Version)
+			assert.Equal(t, test.expected.RawVersion, actual.RawVersion)
+		})
+	}
+}
+
+func retrieveFixtureContentsAsString(fixturePath string, t *testing.T) string {
+	fixture, err := os.Open(fixturePath)
+	if err != nil {
+		t.Fatalf("could not open test fixture=%s: %+v", fixturePath, err)
+	}
+	defer fixture.Close()
+
+	b, err := ioutil.ReadAll(fixture)
+	if err != nil {
+		t.Fatalf("unable to read fixture file: %+v", err)
+	}
+
+	return string(b)
 }

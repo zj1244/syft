@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"reflect"
 	"sort"
 	"strings"
 
 	"github.com/alecthomas/jsonschema"
 	"github.com/zj1244/syft/internal"
+	"github.com/zj1244/syft/internal/presenter/poweruser"
 	"github.com/zj1244/syft/syft/pkg"
-	jsonPresenter "github.com/zj1244/syft/syft/presenter/json"
 )
 
 /*
@@ -25,7 +26,7 @@ can be extended to include specific package metadata struct shapes in the future
 // This should represent all possible metadatas represented in the pkg.Package.Metadata field (an interface{}).
 // When a new package metadata definition is created it will need to be manually added here. The variable name does
 // not matter as long as it is exported.
-type metadataContainer struct {
+type artifactMetadataContainer struct {
 	Apk    pkg.ApkMetadata
 	Dpkg   pkg.DpkgMetadata
 	Gem    pkg.GemMetadata
@@ -33,12 +34,22 @@ type metadataContainer struct {
 	Npm    pkg.NpmPackageJSONMetadata
 	Python pkg.PythonPackageMetadata
 	Rpm    pkg.RpmdbMetadata
+	Cargo  pkg.CargoPackageMetadata
 }
 
-// nolint:funlen
 func main() {
-	metadataSchema := jsonschema.Reflect(&metadataContainer{})
-	documentSchema := jsonschema.Reflect(&jsonPresenter.Document{})
+	write(encode(build()))
+}
+
+func build() *jsonschema.Schema {
+	reflector := &jsonschema.Reflector{
+		AllowAdditionalProperties: true,
+		TypeNamer: func(r reflect.Type) string {
+			return strings.TrimPrefix(r.Name(), "JSON")
+		},
+	}
+	documentSchema := reflector.ReflectFromType(reflect.TypeOf(&poweruser.JSONDocument{}))
+	metadataSchema := reflector.ReflectFromType(reflect.TypeOf(&artifactMetadataContainer{}))
 
 	// TODO: inject source definitions
 
@@ -46,7 +57,7 @@ func main() {
 
 	var metadataNames []string
 	for name, definition := range metadataSchema.Definitions {
-		if name == "metadataContainer" {
+		if name == "artifactMetadataContainer" {
 			// ignore the definition for the fake container
 			continue
 		}
@@ -74,17 +85,25 @@ func main() {
 		"anyOf": metadataTypes,
 	})
 
-	filename := fmt.Sprintf("schema-%s.json", internal.JSONSchemaVersion)
+	return documentSchema
+}
 
+func encode(schema *jsonschema.Schema) []byte {
 	var newSchemaBuffer = new(bytes.Buffer)
 	enc := json.NewEncoder(newSchemaBuffer)
 	// prevent > and < from being escaped in the payload
 	enc.SetEscapeHTML(false)
 	enc.SetIndent("", "  ")
-	err := enc.Encode(&documentSchema)
+	err := enc.Encode(&schema)
 	if err != nil {
 		panic(err)
 	}
+
+	return newSchemaBuffer.Bytes()
+}
+
+func write(schema []byte) {
+	filename := fmt.Sprintf("schema-%s.json", internal.JSONSchemaVersion)
 
 	if _, err := os.Stat(filename); !os.IsNotExist(err) {
 		// check if the schema is the same...
@@ -98,7 +117,7 @@ func main() {
 			panic(err)
 		}
 
-		if bytes.Equal(existingSchemaBytes, newSchemaBuffer.Bytes()) {
+		if bytes.Equal(existingSchemaBytes, schema) {
 			// the generated schema is the same, bail with no error :)
 			fmt.Println("No change to the existing schema!")
 			os.Exit(0)
@@ -114,7 +133,7 @@ func main() {
 		panic(err)
 	}
 
-	_, err = fh.Write(newSchemaBuffer.Bytes())
+	_, err = fh.Write(schema)
 	if err != nil {
 		panic(err)
 	}
